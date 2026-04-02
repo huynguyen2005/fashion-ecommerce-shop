@@ -1,5 +1,5 @@
 const app = require('./app');
-
+require('./dbs/init.database');
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

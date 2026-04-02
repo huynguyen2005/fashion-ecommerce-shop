@@ -1,4 +1,4 @@
-const { StatusCodes, ReasonPhrases } = require("../utils/httpStatusCode");
+const { ReasonPhrases, StatusCodes } = require('http-status-codes');
 
 class ErrorResponse extends Error {
     constructor(message, status){
@@ -8,6 +8,12 @@ class ErrorResponse extends Error {
 };
 
 class BadRequestError extends ErrorResponse {
+    constructor(message = ReasonPhrases.BAD_REQUEST, statusCode = StatusCodes.BAD_REQUEST) {
+        super(message, statusCode);
+    };
+};
+
+class ForbiddenError extends ErrorResponse {
     constructor(message = ReasonPhrases.FORBIDDEN, statusCode = StatusCodes.FORBIDDEN) {
         super(message, statusCode);
     };
@@ -19,7 +25,7 @@ class ConflictError extends ErrorResponse {
     };
 };
 
-class AuthFailureError extends ErrorResponse {
+class UnauthorizedError extends ErrorResponse {
     constructor(message = ReasonPhrases.UNAUTHORIZED, statusCode = StatusCodes.UNAUTHORIZED) {
         super(message, statusCode);
     };
@@ -31,9 +37,17 @@ class NotFoundError extends ErrorResponse {
     };
 };
 
+class InternalServerError extends ErrorResponse {
+    constructor(message = ReasonPhrases.INTERNAL_SERVER_ERROR, statusCode = StatusCodes.INTERNAL_SERVER_ERROR) {
+        super(message, statusCode);
+    };
+};
+
 module.exports = {
     BadRequestError,
+    ForbiddenError,
     ConflictError,
-    AuthFailureError,
-    NotFoundError
+    UnauthorizedError,
+    NotFoundError,
+    InternalServerError
 };
