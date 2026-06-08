@@ -10,5 +10,12 @@ module.exports = {
     },
     findUserById: async (userId) => {
         return await userModel.findOne({ _id: userId, status: 'active' }).select(getSelectData(['_id', 'fullName', 'email'])).lean();
+    },
+    updateUserPasswordById: async ({ userId, password }) => {
+        return await userModel.findByIdAndUpdate(
+            userId,
+            { password },
+            { new: true }
+        );
     }
 };

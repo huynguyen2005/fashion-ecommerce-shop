@@ -1,7 +1,7 @@
 const { BadRequestError } = require("../core/error.response");
 const { Created, OK } = require("../core/success.response");
 const AuthService = require("../services/auth.service");
-const { verifyRefreshToken } = require("../utils/jwt");
+const { verifyRefreshToken } = require("../helpers/jwt.helpers");
 
 
 module.exports = {
@@ -33,6 +33,24 @@ module.exports = {
         new OK({
             message: "Logout successful",
             metadata: await AuthService.logout(userId)
+        }).send(res);
+    },
+    forgotPassword: async (req, res) => {
+        new OK({
+            message: "Forgot password request successful",
+            metadata: await AuthService.forgotPassword(req.body)
+        }).send(res);
+    },
+    verifyForgotPasswordOtp: async (req, res) => {
+        new OK({
+            message: "OTP verified successfully",
+            metadata: await AuthService.verifyForgotPasswordOtp(req.body)
+        }).send(res);
+    },
+    resetPassword: async (req, res) => {
+        new OK({
+            message: "Password reset successful",
+            metadata: await AuthService.resetPassword(req.body)
         }).send(res);
     }
 };
