@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { createKeyToken, findKeyTokenByUserId, updateKeyToken, deleteKeyToken } = require("../models/repositories/keyToken.repository");
-const { findUserByEmail, createNewUser, findUserById, updateUserById } = require("../models/repositories/user.repository");
+const { findUserByEmail, createNewUser, findUserById } = require("../models/repositories/user.repository");
 const { getInfoData } = require("../utils");
 const { createTokenPair } = require("../utils/jwt");
 const { ConflictError, UnauthorizedError, InternalServerError, NotFoundError } = require("../core/error.response");
@@ -98,97 +98,5 @@ class AuthService {
         return true;
     }
 
-    static socialRegistry = {
-        google: {
-            providerField: 'googleId',
-            loginType: 'google'
-        },
-        facebook: {
-            providerField: 'facebookId',
-            loginType: 'facebook'
-        }
-    }
-
-    static handleSocialAuth = async ({
-        provider,
-        providerId,
-        email,
-        fullName,
-        avatar
-    }) => {
-        if (!provider || !providerId || !email) {
-            throw new UnauthorizedError("Error: Invalid social account data");
-        }
-
-        const socialConfig = AuthService.socialRegistry[provider];
-
-        if (!socialConfig) {
-            throw new UnauthorizedError(`Error: Unsupported social provider: ${provider}`);
-        }
-
-        const { providerField, loginType } = socialConfig;
-
-        let user = await findUserByEmail(email);
-
-        if (!user) {
-            const createData = {
-                fullName: fullName || email.split('@')[0],
-                email,
-
-                avatar: avatar || null,
-                loginType,
-                [providerField]: providerId
-            };
-
-            user = await createNewUser(createData);
-
-            if (!user) {
-                throw new InternalServerError("Error: Social registration failed");
-            }
-        } else {
-            const updateData = {};
-
-            if (!user.avatar && avatar) {
-                updateData.avatar = avatar;
-            }
-
-            if (!user[providerField]) {
-                updateData[providerField] = providerId;
-            }
-
-            if (Object.keys(updateData).length > 0) {
-                user = await updateUserById({
-                    userId: user._id,
-                    updateData
-                });
-                if (!user) {
-                    throw new InternalServerError("Error: User update failed");
-                }
-            }
-        }
-
-        const tokens = await createTokenPair({
-            userId: user._id,
-            email: user.email
-        });
-
-        const newKeyToken = await createKeyToken({
-            userId: user._id,
-            refreshToken: tokens.refreshToken
-        });
-
-        if (!newKeyToken) {
-            throw new InternalServerError("Error: Key token creation failed");
-        }
-
-        return {
-            user: getInfoData({
-                fields: ['_id', 'fullName', 'email'],
-                object: user
-            }),
-            tokens
-        };
-    }
 }
-
 module.exports = AuthService;

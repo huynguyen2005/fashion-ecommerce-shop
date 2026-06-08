@@ -17,18 +17,6 @@ module.exports = {
             metadata: await AuthService.login(req.body)
         }).send(res);
     },
-    googleCallback: async (req, res) => {
-        new OK({
-            message: "Google authentication successful",
-            metadata: await AuthService.handleSocialAuth(req.user)
-        }).send(res);
-    },
-    facebookCallback: async (req, res) => {
-        new OK({
-            message: "Facebook authentication successful",
-            metadata: await AuthService.handleSocialAuth(req.user)
-        }).send(res);
-    },
     handlerRefreshToken: async (req, res) => {
         const refreshToken = req.body.refreshToken;
         if(!refreshToken)   throw new BadRequestError("Refresh token is required");
