@@ -1,5 +1,5 @@
 const { findUserById } = require("../models/repositories/user.repository");
-const { verifyAccessToken } = require("../helpers/jwt.helpers");
+const { verifyAccessToken } = require("../helpers/jwt.helper");
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 
 module.exports = {

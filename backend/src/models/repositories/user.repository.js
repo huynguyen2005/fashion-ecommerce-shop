@@ -23,7 +23,7 @@ module.exports = {
   findUserById: async (userId) => {
     return await userModel
       .findOne({ _id: userId, status: "active" })
-      .select(getSelectData(["_id", "fullName", "email"]))
+      .select(getSelectData(["_id", "fullName", "email", "role"]))
       .lean();
   },
   findUserProfileById: async (userId) => {

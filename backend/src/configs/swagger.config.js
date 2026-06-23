@@ -27,6 +27,14 @@ const options = {
         name: "Auth",
         description: "Authentication and password recovery endpoints",
       },
+      {
+        name: "Categories",
+        description: "Public category endpoints",
+      },
+      {
+        name: "Admin Categories",
+        description: "Admin-only category management endpoints",
+      },
     ],
     components: {
       securitySchemes: {
@@ -320,6 +328,127 @@ const options = {
                   },
                 },
               ],
+            },
+          },
+        },
+        Category: {
+          type: "object",
+          properties: {
+            _id: {
+              type: "string",
+              example: "68458d7d0b9f0b3b9947a222",
+            },
+            name: {
+              type: "string",
+              example: "Áo Thun Nam",
+            },
+            slug: {
+              type: "string",
+              example: "ao-thun-nam",
+            },
+            description: {
+              type: "string",
+              example: "Danh mục áo thun nam",
+            },
+            isActive: {
+              type: "boolean",
+              example: true,
+            },
+            deletedAt: {
+              type: "string",
+              format: "date-time",
+              nullable: true,
+              example: null,
+            },
+            createdBy: {
+              type: "string",
+              example: "68458d7d0b9f0b3b9947a111",
+            },
+            updatedBy: {
+              type: "string",
+              example: "68458d7d0b9f0b3b9947a111",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-06-17T09:00:00.000Z",
+            },
+            updatedAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-06-17T09:00:00.000Z",
+            },
+          },
+        },
+        CreateCategoryRequest: {
+          type: "object",
+          required: ["name"],
+          properties: {
+            name: {
+              type: "string",
+              minLength: 2,
+              maxLength: 100,
+              example: "Áo Thun Nam",
+            },
+            description: {
+              type: "string",
+              maxLength: 500,
+              example: "Danh mục áo thun nam",
+            },
+          },
+        },
+        UpdateCategoryRequest: {
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+              minLength: 2,
+              maxLength: 100,
+              example: "Áo Thun Nữ",
+            },
+            description: {
+              type: "string",
+              maxLength: 500,
+              example: "Danh mục áo thun nữ",
+            },
+            isActive: {
+              type: "boolean",
+              example: true,
+            },
+          },
+        },
+        CategoryListResponse: {
+          type: "object",
+          properties: {
+            message: {
+              type: "string",
+              example: "Get categories successfully",
+            },
+            status: {
+              type: "integer",
+              example: 200,
+            },
+            metadata: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/Category",
+              },
+            },
+          },
+        },
+        CategoryDetailResponse: {
+          type: "object",
+          properties: {
+            message: {
+              type: "string",
+              example: "Get category successfully",
+            },
+            status: {
+              type: "integer",
+              example: 200,
+            },
+            metadata: {
+              $ref: "#/components/schemas/Category",
             },
           },
         },

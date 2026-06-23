@@ -12,7 +12,7 @@ const {
   updateUserPasswordById,
 } = require("../models/repositories/user.repository");
 const { getInfoData, generateOTP } = require("../utils");
-const { createTokenPair } = require("../helpers/jwt.helpers");
+const { createTokenPair } = require("../helpers/jwt.helper");
 const MailService = require("./mail.service");
 const OtpService = require("./otp.service");
 const {

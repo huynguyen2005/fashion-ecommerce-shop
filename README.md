@@ -414,3 +414,34 @@ Hiện tại trong module `auth`, route yêu cầu token là:
 | POST | `/api/v1/auth/forgot-password` | Gửi OTP quên mật khẩu |
 | POST | `/api/v1/auth/verify-otp` | Xác thực OTP để lấy reset token |
 | POST | `/api/v1/auth/reset-password` | Đặt lại mật khẩu |
+
+---
+
+## Category API
+
+Phần `category` cung cấp các API để quản lý danh mục sản phẩm. Hỗ trợ Soft Delete và tự động sinh URL slug từ tên danh mục.
+
+### Chức năng hiện có
+
+**Public (Không cần đăng nhập):**
+- Lấy danh sách danh mục đang hoạt động (có cache)
+- Lấy chi tiết danh mục bằng slug (có cache)
+
+**Admin (Yêu cầu đăng nhập + Role Admin):**
+- Tạo mới danh mục
+- Cập nhật thông tin danh mục
+- Xóa danh mục (Soft Delete)
+
+### Cơ chế Cache (Redis)
+- Toàn bộ kết quả `GET` danh mục được lưu vào Redis với TTL là `3600` giây (1 giờ).
+- Tính năng Cache Invalidation tự động xóa cache khi Admin thực hiện Thêm, Sửa, hoặc Xóa danh mục, đảm bảo người dùng luôn thấy dữ liệu mới nhất.
+
+### Danh sách endpoint Category
+
+| Method | Endpoint | Quyền | Mô tả |
+| --- | --- | --- | --- |
+| GET | `/api/v1/categories` | Public | Lấy danh sách danh mục |
+| GET | `/api/v1/categories/:slug` | Public | Lấy chi tiết danh mục theo slug |
+| POST | `/api/v1/admin/categories` | Admin | Tạo danh mục mới |
+| PATCH | `/api/v1/admin/categories/:id` | Admin | Sửa danh mục |
+| DELETE | `/api/v1/admin/categories/:id` | Admin | Xóa mềm danh mục |
