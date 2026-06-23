@@ -26,24 +26,10 @@ class CacheService {
     await redis.del(key);
   }
 
-  // static async delByPattern(pattern) {
-  //   const redis = this.getRedis();
-
-  //   let cursor = "0";
-
-  //   do {
-  //     const result = await redis.scan(cursor, {
-  //       MATCH: pattern,
-  //       COUNT: 100,
-  //     });
-
-  //     cursor = String(result.cursor);
-
-  //     if (result.keys.length > 0) {
-  //       await redis.del(result.keys);
-  //     }
-  //   } while (cursor !== "0");
-  // }
+  static async incr(key) {
+    const redis = this.getRedis();
+    return await redis.incr(key);
+  }
 }
 
 module.exports = CacheService;
